@@ -1,7 +1,7 @@
 from __future__ import print_function
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
-from math import *
+from math import sin, cos, sqrt, atan2, radians
 
 def calculate_distance(lat1, lon1, lat2, lon2):
     R = 6373.0
@@ -50,6 +50,10 @@ for i in range(n_lojas):
         linha_matriz.append(calculate_distance(lista_locs[i][0], lista_locs[i][1], lista_locs[j][0], lista_locs[j][1]))
     matriz.append(linha_matriz)
 
+""" 
+a partir daqui o código foi pegado do or-tools e modificado apenas o necessário
+"""
+
 def create_data_model():
     """armazena os dados para o problema"""
     data = {}
@@ -66,13 +70,13 @@ def print_solution(manager, routing, solution):
     route_distance = 0
     count=1
     while not routing.IsEnd(index):
-        #plan_output += 'Visita-> {} -> '.format(manager.IndexToNode(index))
-        plan_output += '{} Visita -> {} -> Distância \n'.format(count, lista_lojas[manager.IndexToNode(index)])
+        
+        plan_output += '{} Visita -> {} -> Distância '.format(count, lista_lojas[manager.IndexToNode(index)])
         count+=1
         previous_index = index
         index = solution.Value(routing.NextVar(index))
         route_distance += routing.GetArcCostForVehicle(previous_index, index, 0)
-    plan_output += ' {}\n'.format(manager.IndexToNode(index))
+        plan_output += '{}m\n'.format(routing.GetArcCostForVehicle(previous_index, index, 0))
     print(plan_output)
     plan_output += 'Route distance: {}Km\n'.format(route_distance)
 

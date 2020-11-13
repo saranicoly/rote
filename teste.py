@@ -1,7 +1,7 @@
 from __future__ import print_function
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
-from math import *
+from math import sin, cos, sqrt, atan2, radians
 
 def calculate_distance(lat1, lon1, lat2, lon2):
     R = 6373.0
