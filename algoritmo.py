@@ -20,6 +20,7 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 
 n_lojas = 0
 lista_locs = []
+lista_lojas = []
 
 #abrir e tratar arquivo
 name = input("Digite o nome do arquivo: ")
@@ -33,6 +34,8 @@ for line in file:
     else:
         local = line.split(',')
         n_lojas+=1
+        #adiciona nomes das lojas na lista
+        lista_lojas.append(local[0])
         #adiciona em lista_locs as latitudes e longitudes
         lista_locs.append([float(local[1]), float(local[2])])
 
@@ -59,10 +62,13 @@ def create_data_model():
 def print_solution(manager, routing, solution):
     """mostra a solução no console."""
     index = routing.Start(0)
-    plan_output = 'Route for vehicle 0:\n'
+    plan_output = '\n'
     route_distance = 0
+    count=1
     while not routing.IsEnd(index):
-        plan_output += ' {} ->'.format(manager.IndexToNode(index))
+        #plan_output += 'Visita-> {} -> '.format(manager.IndexToNode(index))
+        plan_output += '{} Visita -> {} -> Distância \n'.format(count, lista_lojas[manager.IndexToNode(index)])
+        count+=1
         previous_index = index
         index = solution.Value(routing.NextVar(index))
         route_distance += routing.GetArcCostForVehicle(previous_index, index, 0)
